@@ -1,13 +1,15 @@
 
 require("dotenv").config();
+var request = require("request");
 
 // Add the code required to import the keys.js file and store it in a variable ?????.
 
-var spotify = new Spotify(keys.spotify);
-var client = new Twitter(keys.twitter);
+// var spotify = new Spotify(keys.spotify);
+// var client = new Twitter(keys.twitter);
+// Include the request npm package (Don't forget to run "npm install request" in this folder first!)
 
 var command = process.argv[2];
-
+var movieName = process.argv[3];
 /*
  Make it so liri.js can take in one of the following commands:
 
@@ -20,8 +22,8 @@ var command = process.argv[2];
 * `do-what-it-says`
 
 we may use some if else statements to check user input. (process.argv)maybe ???  */
-if (command === 'movie-this') {
-    movieThis();
+if (command === 'movie') {
+    movieThis(movieName);
 }
 
 function myTweets() {
@@ -42,20 +44,29 @@ function spotfiy(song_name) {
 }
 
 function movieThis(movie_name) {
+    // Then run a request to the OMDB API with the movie specified
+    request("http://www.omdbapi.com/?t=" + movie_name + "&y=&plot=short&apikey=trilogy", function (error, response) {
 
-   /* 
-   * Title of the movie.
-    * Year the movie came out.
-    * IMDB Rating of the movie.
-    * Rotten Tomatoes Rating of the movie.
-    * Country where the movie was produced.
-    * Language of the movie.
-    * Plot of the movie.
-    * Actors in the movie.
-    * use trilogy key 
-     */
-}
+        if (!error && response.statusCode === 200) {
+    
+            console.log("The movie's rating is: " + JSON.parse(response.body).imdbRating);
+
+            console.log("Title : " + JSON.parse(response.body).Title);
+          
+            console.log("Language : " + JSON.parse(response.body).Language);
+
+            console.log("Actors : " + JSON.parse(response.body).Actors);
+
+            console.log("Country : " + JSON.parse(response.body).Country);
+
+        }
+    });
+ 
+} //end of movie function
+
 
 function doWhatItSays() {
 
-} 
+}
+
+

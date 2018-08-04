@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/AbdulAlabra/node-hw/issues"
   },
-  "homepage": "https://github.com/AbdulAlabra/node-hw#readme"
+  "homepage": "https://github.com/AbdulAlabra/node-hw#readme",
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "request": "^2.87.0"
+  }
 }
