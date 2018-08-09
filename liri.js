@@ -38,10 +38,16 @@ var movieName = process.argv[3];
 * `do-what-it-says`
 
 we may use some if else statements to check user input. (process.argv)maybe ???  */
-if (command === 'movie') {
-    movieThis(movieName);
+if (command === 'movie') { 
     
+    if(movieName === undefined) {
+        showMovie('Mr.nobody');
+    }
+    else { 
+        showMovie(movieName);
+    }   
 }
+
 else if (command === 'my-tweets') {
     myTweets();
 }
@@ -83,7 +89,7 @@ function spotfiy(song_name) {
     // If no song is provided then your program will default to "The Sign" by Ace of Base
 }
 
-function movieThis(movie_name) {
+function showMovie(movie_name) {
     // Then run a request to the OMDB API with the movie specified
     request("http://www.omdbapi.com/?t=" + movie_name + "&y=&plot=short&apikey=trilogy", function (error, response) {
 
