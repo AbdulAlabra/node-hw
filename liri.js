@@ -1,56 +1,44 @@
 
 require("dotenv").config();
+
+//requests needed to run the progeam 
 var request = require("request");
 var keys = require("./keys.js");
 var Twitter = require('twitter');
+var Spotify = require('node-spotify-api');
 
-var Spotify = keys.spotify;
-
-// twitter is working now
+var spotify = new Spotify(keys.spotify);
 var client = new Twitter(keys.twitter);
 
-
-
-// id: 2722037155,
-// id_str: '2722037155',
-// name: 'INRTracker',
-// screen_name: 'INRTracker',
-
-
-
-
-
-//these are the commands lclearine 
+//these are the commands or the user input  
 var command = process.argv[2];
-var movieName = process.argv[3];
+var name = process.argv[3];
 
+if (command === 'movie') {
 
-
-/*
- Make it so liri.js can take in one of the following commands:
-
-* `my-tweets`
-
-* `spotify-this-song`
-
-* `movie-this`
-
-* `do-what-it-says`
-
-we may use some if else statements to check user input. (process.argv)maybe ???  */
-if (command === 'movie') { 
-    
-    if(movieName === undefined) {
+    if (name === undefined) {
         showMovie('Mr.nobody');
     }
-    else { 
-        showMovie(movieName);
-    }   
+    else {
+        showMovie(name);
+    }
 }
 
 else if (command === 'my-tweets') {
     myTweets();
 }
+
+else if (command === 'spotify') {
+
+    if (name === undefined) {
+        spotfiy('The Sign');
+    }
+    else {
+        spotfiy(name);
+    }
+}
+
+
 
 function myTweets() {
 
@@ -59,11 +47,10 @@ function myTweets() {
             console.log('it did not work');
             console.log(error);
         }
-
         else {
-            //this is like the for looping but this one is less code.  
-            var my_tweets = tweets.filter( function (textVal) {
-                return console.log('Your Tweet: ' + '" ' + textVal.text + ' "' + '\nPosted on: ' + textVal.created_at + '\n');
+            //this is like the for loop but this one is less code.  
+            var my_tweets = tweets.filter(function (Obj) {
+                return console.log('Your Tweet: ' + '" ' + Obj.text + ' "' + '\nPosted on: ' + Obj.created_at + '\n');
             });
         }
 
@@ -77,17 +64,23 @@ function myTweets() {
 }
 
 function spotfiy(song_name) {
-    //do some thing when they type a song 
 
-    /* 
-    This will show the following information about the song in your terminal/bash window
-    Artist(s)
-    The song's name
-    A preview link of the song from Spotify
-    The album that the song is from */
+    spotify.search({ type: 'track', query: song_name, limit: 20 }, function (err, data) {
+        console.log('\n--------------Hereis Your Result(s)--------------------\n')
+        if (err) {
+            return console.log('Error occurred: ' + err);
+        }
 
-    // If no song is provided then your program will default to "The Sign" by Ace of Base
-}
+        else {
+            var findSong = data.tracks.items.filter(function (obj) {
+                
+                if (obj.name == song_name) {
+                    return console.log('Song Name: ' + obj.name + '\nArtist Name: ' + obj.artists[0].name + '\nAlbum: ' + obj.album.name + '\nPreview Link: ' + obj.preview_url + '\n');
+                }
+            });
+        } //end of else statement
+    }); //end of spotify search
+} //end of spotify fuction
 
 function showMovie(movie_name) {
     // Then run a request to the OMDB API with the movie specified
@@ -115,3 +108,15 @@ function doWhatItSays() {
 
 }
 
+
+
+
+
+
+
+
+
+
+// New Spotify keys that I registred for in case you want to use them
+// SPOTIFY_ID=63985eca244242d4809e95e313fb986d
+// SPOTIFY_SECRET=a135632f4d3849a494ef9257a8dc0f37
