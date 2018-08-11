@@ -41,7 +41,7 @@ else if (command === 'do-what-it-says') {
 }
 
 else {
-    console.log("\n Search For songs by using --> spotify-this-song ' Song's name '\n NOTE: The first letter of every song name must be Capital for a better result (ex.The Sign)");
+    console.log("\n Search For songs by using --> spotify-this-song 'Song's name'");
 
     console.log("\n Look at the last 20 tweets by using --> my-tweets");
 
@@ -84,8 +84,9 @@ function spotfiy(song_name) {
             console.log('\n--------------Hereis Your Result(s)--------------------\n')
 
             var findSong = data.tracks.items.filter(function (obj) {
-                // console.log(obj.name)
-                if (obj.name.includes(song_name)) {
+                //this is used for search enhancement so that if type lower or upper 
+                var BetterSearchResult = obj.name.toUpperCase();
+                if ( BetterSearchResult.includes( song_name.toUpperCase() )) {
 
                     return console.log('Song Name: ' + obj.name + '\nArtist Name: ' + obj.artists[0].name + '\nAlbum: ' + obj.album.name + '\nPreview Link: ' + obj.preview_url + '\n');
                 }
